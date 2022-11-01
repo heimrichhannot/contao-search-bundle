@@ -12,7 +12,7 @@
 namespace HeimrichHannot\SearchBundle\Event;
 
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class BeforeGetSearchablePagesEvent extends Event
 {

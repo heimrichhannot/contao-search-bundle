@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.8.0] - 2022-11-01
+- Changed: allow php 8
+- Changed: raised php and contao dependencies
+- Fixed: symfony 5 support
+
 ## [2.7.2] - 2021-09-24
 - Fixed: usage of php 7.4-only method
 

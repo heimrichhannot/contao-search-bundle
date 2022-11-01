@@ -15,7 +15,7 @@ namespace HeimrichHannot\SearchBundle\Command;
 use Contao\Automator;
 use Contao\Controller;
 use Contao\CoreBundle\Command\AbstractLockedCommand;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\RebuildIndex;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -37,10 +37,8 @@ class RebuildSearchIndexCommand extends AbstractLockedCommand
     const CRAWL_PAGE_PARAMETER = 'crawlpage';
 
     protected static $defaultName = 'huh:search:index';
-    /**
-     * @var ContaoFrameworkInterface
-     */
-    private $framework;
+
+    private ContaoFramework $framework;
     /**
      * @var array
      */
@@ -58,7 +56,7 @@ class RebuildSearchIndexCommand extends AbstractLockedCommand
      */
     private $eventDispatcher;
 
-    public function __construct(ContaoFrameworkInterface $framework, array $packages = [], Logger $searchLogger, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ContaoFramework $framework, array $packages = [], Logger $searchLogger, EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct();
         $this->framework = $framework;
@@ -208,7 +206,10 @@ class RebuildSearchIndexCommand extends AbstractLockedCommand
             foreach ($GLOBALS['TL_HOOKS']['getSearchablePages'] as $callback)
             {
                 /** @var BeforeGetSearchablePagesEvent $event */
-                $event = $this->eventDispatcher->dispatch(BeforeGetSearchablePagesEvent::NAME, new BeforeGetSearchablePagesEvent($callback[0], $callback[1], $pages));
+                $event = $this->eventDispatcher->dispatch(
+                    new BeforeGetSearchablePagesEvent($callback[0], $callback[1], $pages),
+                    BeforeGetSearchablePagesEvent::NAME
+                );
 
                 $pages = $event->getPages();
                 if (!$event->getExecuteHook()) {

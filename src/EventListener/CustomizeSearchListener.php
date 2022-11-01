@@ -17,7 +17,7 @@ use Contao\Module;
 use Contao\ModuleSearch;
 use Contao\StringUtil;
 use Monolog\Logger;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CustomizeSearchListener
 {

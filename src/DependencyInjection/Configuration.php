@@ -21,20 +21,13 @@ class Configuration implements ConfigurationInterface
     /**
      * Generates the configuration tree builder.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     * @return TreeBuilder The tree builder
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('huh_search');
 
-        // Keep compatibility with symfony/config < 4.2
-        if (!method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->root('huh_search');
-        } else {
-            $rootNode = $treeBuilder->getRootNode();
-        }
-
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->arrayNode('pdf_indexer')
                     ->info("Configure the pdf indexer.")
