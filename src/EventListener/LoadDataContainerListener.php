@@ -12,6 +12,9 @@
 namespace HeimrichHannot\SearchBundle\EventListener;
 
 
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
+
 class LoadDataContainerListener
 {
     /**
@@ -66,7 +69,7 @@ class LoadDataContainerListener
                     'default'   => 'exclude',
                     'reference' => &$GLOBALS['TL_LANG']['tl_module']['pageMode'],
                     'eval'      => ['tl_class' => 'w50'],
-                    'sql'       => "varchar(32) NOT NULL default 'exclude'",
+                    'sql'       => "varchar(8) NOT NULL default 'exclude'",
                 ],
                 'filterPages'  => array_merge_recursive([
                     'label'     => &$GLOBALS['TL_LANG']['tl_module']['filterPages'],
@@ -92,11 +95,20 @@ class LoadDataContainerListener
 
             $fields = [
                 'maxKeywordCount' => [
-                    'label'            => &$GLOBALS['TL_LANG']['tl_module']['maxKeywordCount'],
-                    'exclude'          => true,
-                    'inputType'        => 'text',
-                    'eval'             => array('rgxp'=>'digit', 'tl_class'=>'clr w50'),
-                    'sql'              => "int(10) unsigned NOT NULL default '0'"
+                    'label'     => &$GLOBALS['TL_LANG']['tl_module']['maxKeywordCount'],
+                    'exclude'   => true,
+                    'inputType' => 'text',
+                    'eval'      => [
+                        'rgxp' => 'digit',
+                        'tl_class' => 'clr w50',
+                        'maxval' => 128,
+                    ],
+                    'sql'       => [
+                        'type' => Types::SMALLINT,
+                        'notnull' => true,
+                        'unsigned' => true,
+                        'default' => 0
+                    ]
                 ]
             ];
             $dca['fields'] = array_merge($fields, is_array($dca['fields']) ? $dca['fields'] : []);

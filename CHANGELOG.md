@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.8.1] - 2023-01-09
+- Changed: reduced database size
+
 ## [2.8.0] - 2022-11-01
 - Changed: allow php 8
 - Changed: raised php and contao dependencies
