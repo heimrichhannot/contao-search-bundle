@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2023-03-14
+- Fixed: deprecation warning on cache warmup
+
 ## [2.8.1] - 2023-01-09
 - Changed: reduced database size
 

@@ -56,7 +56,7 @@ class RebuildSearchIndexCommand extends AbstractLockedCommand
      */
     private $eventDispatcher;
 
-    public function __construct(ContaoFramework $framework, array $packages = [], Logger $searchLogger, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ContaoFramework $framework, array $packages, Logger $searchLogger, EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct();
         $this->framework = $framework;
