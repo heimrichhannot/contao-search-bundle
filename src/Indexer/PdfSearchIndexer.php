@@ -17,6 +17,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Environment;
 use Contao\File;
 use Contao\Frontend;
+use Contao\PageModel;
 use Contao\Search;
 use Contao\StringUtil;
 use Contao\System;
@@ -118,7 +119,12 @@ class PdfSearchIndexer
             $arrMeta['title'] = StringUtil::specialchars($objFile->basename);
         }
 
-        $strHref = Environment::get('base') . Environment::get('request');
+        $pageModel = PageModel::findByPk($arrParentSet['pid'] ?? 0);
+        if ($pageModel) {
+            $strHref = $pageModel->getAbsoluteUrl();
+        } else {
+            $strHref = Environment::get('base') . Environment::get('request');
+        }
 
         // Remove an existing file parameter
         if (preg_match('/(&(amp;)?|\?)file=/', $strHref)) {
