@@ -14,8 +14,7 @@ namespace HeimrichHannot\SearchBundle\EventListener;
 
 use HeimrichHannot\SearchBundle\Command\RebuildSearchIndexCommand;
 use HeimrichHannot\SearchBundle\Indexer\PdfSearchIndexer;
-use HeimrichHannot\UtilsBundle\String\StringUtil;
-use HeimrichHannot\UtilsBundle\Url\UrlUtil;
+use HeimrichHannot\UtilsBundle\Util\Utils;
 
 class IndexPageListener
 {
@@ -24,24 +23,16 @@ class IndexPageListener
      */
     protected $pdfSearchIndexer;
     /**
-     * @var StringUtil
-     */
-    protected $stringUtil;
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-    /**
      * @var array
      */
-    private $bundleConfig;
+    private       $bundleConfig;
+    private Utils $utils;
 
-    public function __construct(array $bundleConfig, UrlUtil $urlUtil, PdfSearchIndexer $pdfSearchIndexer, StringUtil $stringUtil)
+    public function __construct(array $bundleConfig, PdfSearchIndexer $pdfSearchIndexer, Utils $utils)
     {
-        $this->urlUtil = $urlUtil;
         $this->bundleConfig = $bundleConfig;
         $this->pdfSearchIndexer = $pdfSearchIndexer;
-        $this->stringUtil = $stringUtil;
+        $this->utils = $utils;
     }
 
 
@@ -52,11 +43,11 @@ class IndexPageListener
     {
         if (isset($this->bundleConfig['disable_search_indexer']) && true === $this->bundleConfig['disable_search_indexer']) {
             $url = $indexData['url'];
-            $url = $this->urlUtil->removeQueryString([RebuildSearchIndexCommand::CRAWL_PAGE_PARAMETER], $url, ['absoluteUrl' => true]);
+            $url = $this->utils->url()->removeQueryStringParameterToUrl(RebuildSearchIndexCommand::CRAWL_PAGE_PARAMETER, $url);
             $indexData['url'] = $url;
         }
         if (isset($this->bundleConfig['pdf_indexer']['enabled']) && true === $this->bundleConfig['pdf_indexer']['enabled']) {
-            if ($this->stringUtil->endsWith($pageData['url'], '.pdf')) {
+            if (str_ends_with($pageData['url'], '.pdf')) {
                 $indexData['fileHash'] = $pageData['fileHash'];
             } else {
                 if (preg_match_all('/href="(?<links>[^\"<]+\.pdf[^"]*)"/i', $content, $matches))
@@ -65,6 +56,5 @@ class IndexPageListener
                 }
             }
         }
-        return;
     }
 }
