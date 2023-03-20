@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.8.3] - 2023-03-20
+- Fixed: bad pdf url when using search index crawler ([#7], [#8]) 
+- Fixed: some deprecations ([#8])
+
 ## [2.8.2] - 2023-03-14
 - Fixed: deprecation warning on cache warmup
 
@@ -80,3 +84,6 @@ All notable changes to this project will be documented in this file.
 ## [1.0.0] - 2019-11-06
 
 First release
+
+[#8]: https://github.com/heimrichhannot/contao-search-bundle/pull/8
+[#7]: https://github.com/heimrichhannot/contao-search-bundle/issues/7
