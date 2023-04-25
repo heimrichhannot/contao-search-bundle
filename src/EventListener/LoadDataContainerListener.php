@@ -56,8 +56,6 @@ class LoadDataContainerListener
 
         if ($this->filterSearch)
         {
-
-
             $dca['palettes']['search'] = str_replace('{redirect_legend', '{search_filter_legend},pageMode,filterPages,addPageDepth;{redirect_legend', $dca['palettes']['search']);
 
             $fields        = [

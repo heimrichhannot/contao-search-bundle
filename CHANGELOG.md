@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.8.4] - 2023-04-25
+- Fixed: search page changes not applied directly
+
 ## [2.8.3] - 2023-03-20
 - Fixed: bad pdf url when using search index crawler ([#7], [#8]) 
 - Fixed: some deprecations ([#8])
