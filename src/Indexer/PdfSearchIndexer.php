@@ -63,18 +63,18 @@ class PdfSearchIndexer
     public function indexPdfFiles(array $links, $arrParentSet)
     {
         foreach ($links as $strFile) {
-            if (($strFile = static::getValidPath($strFile, [Environment::get('host')])) === null) {
+            $arrUrl = parse_url($strFile);
+            
+            if (($strFile = static::getValidPath($strFile, [Environment::get('host')], $arrUrl)) === null) {
                 continue;
             }
 
-            $this->addToPDFSearchIndex($strFile, $arrParentSet);
+            $this->addToPDFSearchIndex($strFile, $arrParentSet, $arrUrl);
         }
     }
 
-    public function getValidPath($varValue, array $arrHosts = [])
+    public function getValidPath($varValue, array $arrHosts = [], $arrUrl)
     {
-        $arrUrl = parse_url($varValue);
-
         $strFile = $arrUrl['path'];
 
         // linked pdf is an valid absolute url
@@ -102,7 +102,7 @@ class PdfSearchIndexer
         return $strFile;
     }
 
-    protected function addToPDFSearchIndex($strFile, $arrParentSet): void
+    protected function addToPDFSearchIndex($strFile, $arrParentSet, $arrUrl): void
     {
         $objFile = new File($strFile);
 
@@ -131,7 +131,12 @@ class PdfSearchIndexer
             $strHref = preg_replace('/(&(amp;)?|\?)file=[^&]+/', '', $strHref);
         }
 
-        $strHref .= ((Config::get('disableAlias') || strpos($strHref, '?') !== false) ? '&amp;' : '?') . 'file=' . System::urlEncode($objFile->value);
+        // check for download link
+        if (isset($arrUrl['query']) && preg_match('#file=(?<path>.*.pdf)#i', $arrUrl['query'], $m)) {
+            $strHref .= ((Config::get('disableAlias') || strpos($strHref, '?') !== false) ? '&amp;' : '?') . 'file=' . System::urlEncode($objFile->value);
+        } else {
+            $strHref .= System::urlEncode($objFile->value);
+        }
 
         $filesize = round($objFile->size / 1024, 2);
 
