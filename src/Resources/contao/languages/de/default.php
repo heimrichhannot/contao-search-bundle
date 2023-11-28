@@ -8,6 +8,8 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
+use HeimrichHannot\SearchBundle\Controller\ContentElement\RelatedSearchLinkElementController;
+
 $lang = &$GLOBALS['TL_LANG'];
 
-$lang['CTE'][\HeimrichHannot\SearchBundle\ContentElement\RelatedSearchLinkElement::TYPE][0] = 'Verwandte Suche Link';
+$lang['CTE'][RelatedSearchLinkElementController::TYPE][0] = 'Verwandte Suche Link';

@@ -22,45 +22,28 @@ use Contao\Search;
 use Contao\StringUtil;
 use Contao\System;
 use Doctrine\DBAL\Connection;
-use HeimrichHannot\UtilsBundle\Container\ContainerUtil;
-use HeimrichHannot\UtilsBundle\String\StringUtil as HuhStringUtil;
+use HeimrichHannot\UtilsBundle\Util\Utils;
 use Smalot\PdfParser\Parser;
 
 class PdfSearchIndexer
 {
-    /**
-     * @var ContaoFramework
-     */
-    protected $framework;
-    /**
-     * @var Connection
-     */
-    protected $connection;
-    /**
-     * @var HuhStringUtil
-     */
-    protected $stringUtil;
-    /**
-     * @var array
-     */
-    protected $bundleConfig;
-    /**
-     * @var ContainerUtil
-     */
-    protected $containerUtil;
+    protected ContaoFramework $framework;
+    protected Connection $connection;
+    protected array $bundleConfig;
+    private Utils $utils;
 
     /**
      * PdfSearchIndexer constructor.
      */
-    public function __construct(ContaoFramework $framework, Connection $connection, array $bundleConfig, ContainerUtil $containerUtil)
+    public function __construct(ContaoFramework $framework, Connection $connection, array $bundleConfig, Utils $utils)
     {
         $this->framework     = $framework;
         $this->connection    = $connection;
         $this->bundleConfig  = $bundleConfig;
-        $this->containerUtil = $containerUtil;
+        $this->utils = $utils;
     }
 
-    public function indexPdfFiles(array $links, $arrParentSet)
+    public function indexPdfFiles(array $links, array $parentSet)
     {
         foreach ($links as $strFile) {
             $arrUrl = parse_url($strFile);
@@ -69,7 +52,7 @@ class PdfSearchIndexer
                 continue;
             }
 
-            $this->addToPDFSearchIndex($strFile, $arrParentSet, $arrUrl);
+            $this->addToPDFSearchIndex($strFile, $parentSet, $arrUrl);
         }
     }
 
@@ -199,7 +182,7 @@ class PdfSearchIndexer
         try {
             $search->indexPage($arrSet);
         } catch (\Throwable $t) {
-            if ($this->containerUtil->isDev()) {
+            if ($this->utils->container()->isDev()) {
                 throw new \Exception("Could not add a search index entry: " . $t->getMessage());
             }
         }

@@ -12,20 +12,18 @@
 namespace HeimrichHannot\SearchBundle\EventListener;
 
 
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use HeimrichHannot\SearchBundle\Command\RebuildSearchIndexCommand;
 use HeimrichHannot\SearchBundle\Indexer\PdfSearchIndexer;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 
+/**
+ * @Hook("indexPage")
+ */
 class IndexPageListener
 {
-    /**
-     * @var PdfSearchIndexer
-     */
-    protected $pdfSearchIndexer;
-    /**
-     * @var array
-     */
-    private       $bundleConfig;
+    protected PdfSearchIndexer $pdfSearchIndexer;
+    private array $bundleConfig;
     private Utils $utils;
 
     public function __construct(array $bundleConfig, PdfSearchIndexer $pdfSearchIndexer, Utils $utils)
@@ -35,15 +33,13 @@ class IndexPageListener
         $this->utils = $utils;
     }
 
-
-    /**
-     * @Hook("indexPage")
-     */
-    public function onIndexPage(string $content, array $pageData, array &$indexData): void
+    public function __invoke(string $content, array $pageData, array &$indexData): void
     {
-        if (isset($this->bundleConfig['disable_search_indexer']) && true === $this->bundleConfig['disable_search_indexer']) {
+        if (true === ($this->bundleConfig['disable_search_indexer'] ?? false)) {
+            trigger_deprecation("heimrichhannot/contao-search-bundle", "2.9.0", "Using huh_search.disable_search_indexer is deprecated and will be removed in next major version. Please use the contao core settings instead.");
+
             $url = $indexData['url'];
-            $url = $this->utils->url()->removeQueryStringParameterToUrl(RebuildSearchIndexCommand::CRAWL_PAGE_PARAMETER, $url);
+            $url = $this->utils->url()->removeQueryStringParameterFromUrl(RebuildSearchIndexCommand::CRAWL_PAGE_PARAMETER, $url);
             $indexData['url'] = $url;
         }
         if (isset($this->bundleConfig['pdf_indexer']['enabled']) && true === $this->bundleConfig['pdf_indexer']['enabled']) {

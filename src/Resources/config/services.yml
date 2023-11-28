@@ -9,17 +9,13 @@ services:
     arguments:
       - "%%datetime%%,\"%%message%%\"\n"
 
-  HeimrichHannot\SearchBundle\Indexer\PdfSearchIndexer:
+  HeimrichHannot\SearchBundle\:
+    resource: '../../{Controller,Indexer}/*'
     autowire: true
+    autoconfigure: true
 
   HeimrichHannot\SearchBundle\EventListener\:
     resource: '../../EventListener/*'
     autowire: true
+    autoconfigure: true
     public: true
-
-  HeimrichHannot\SearchBundle\Command\RebuildSearchIndexCommand:
-    tags: [ 'console.command' ]
-    autowire: true
-    bind:
-      $packages: '%kernel.packages%'
-      $searchLogger: "@monolog.logger.huh_search"

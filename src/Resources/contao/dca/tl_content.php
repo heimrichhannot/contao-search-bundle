@@ -8,6 +8,8 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
+use HeimrichHannot\SearchBundle\Controller\ContentElement\RelatedSearchLinkElementController;
+
 $dc = &$GLOBALS['TL_DCA']['tl_content'];
 
-$dc['palettes'][\HeimrichHannot\SearchBundle\ContentElement\RelatedSearchLinkElement::TYPE] = $dc['palettes']['hyperlink'];
+$dc['palettes'][RelatedSearchLinkElementController::TYPE] = $dc['palettes']['hyperlink'];

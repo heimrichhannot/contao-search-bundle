@@ -32,6 +32,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @deprecated Use contao:crawl instead
+
+ */
 class RebuildSearchIndexCommand extends AbstractLockedCommand
 {
     const CRAWL_PAGE_PARAMETER = 'crawlpage';

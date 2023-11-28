@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.9.0] - 2023-11-28
+- Changed: refactored content element
+- Fixed: incorrect links when pdf was not in a download element ([#9], [@c4y])
+- Fixed: some deprecations
+- Deprecated: crawl command
+- Deprecated: disable_search_indexer config option
+
 ## [2.8.4] - 2023-04-25
 - Fixed: search page changes not applied directly
 
@@ -88,5 +95,8 @@ All notable changes to this project will be documented in this file.
 
 First release
 
+[@c4y]: https://github.com/c4y
+
+[#9]: https://github.com/heimrichhannot/contao-search-bundle/pull/9
 [#8]: https://github.com/heimrichhannot/contao-search-bundle/pull/8
 [#7]: https://github.com/heimrichhannot/contao-search-bundle/issues/7
