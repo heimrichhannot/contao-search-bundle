@@ -12,9 +12,10 @@
 namespace HeimrichHannot\SearchBundle\EventListener;
 
 
-use Doctrine\DBAL\Types\Type;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Doctrine\DBAL\Types\Types;
 
+#[AsHook("loadDataContainer")]
 class LoadDataContainerListener
 {
     protected bool $filterSearch = false;
@@ -36,7 +37,7 @@ class LoadDataContainerListener
     /**
      * @param string $table
      */
-    public function onLoadDataContainer(string $table)
+    public function __invoke(string $table)
     {
         if ('tl_module' !== $table) {
             return;

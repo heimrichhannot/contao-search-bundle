@@ -12,6 +12,7 @@
 namespace HeimrichHannot\SearchBundle\EventListener;
 
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Database;
 use Contao\Module;
 use Contao\ModuleSearch;
@@ -19,6 +20,7 @@ use Contao\StringUtil;
 use Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsHook("customizeSearch")]
 class CustomizeSearchListener
 {
     protected bool $enableFilterSearch = false;
@@ -58,7 +60,7 @@ class CustomizeSearchListener
      * @param bool $fuzzy
      * @param ModuleSearch|Module $module
      */
-    public function onCustomizeSearch(array &$pageIds, string &$keywords, string $queryType, bool $fuzzy, Module $module): void
+    public function __invoke(array &$pageIds, string &$keywords, string $queryType, bool $fuzzy, Module $module): void
     {
         if ($this->enableSearchLog) {
             $this->logSearch($keywords);

@@ -10,12 +10,12 @@ services:
       - "%%datetime%%,\"%%message%%\"\n"
 
   HeimrichHannot\SearchBundle\:
-    resource: '../../{Controller,Indexer}/*'
+    resource: '../src/{Controller,Indexer}/*'
     autowire: true
     autoconfigure: true
 
   HeimrichHannot\SearchBundle\EventListener\:
-    resource: '../../EventListener/*'
+    resource: '../src/EventListener/*'
     autowire: true
     autoconfigure: true
     public: true
