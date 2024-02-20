@@ -91,42 +91,30 @@ Complete configuration reference
 # Default configuration for extension with alias: "huh_search"
 huh_search:
 
-    # Configure the pdf indexer.
-    pdf_indexer:
+   # Configure the pdf indexer.
+   pdf_indexer:
 
-        # Enable pdf indexing for search.
-        enabled:              false
+      # Enable pdf indexing for search.
+      enabled:              false
 
-        # Max characters to process and store from a pdf file. 0 means no limit.
-        max_indexed_characters: 2000
+      # Max characters to process and store from a pdf file. 0 means no limit.
+      max_indexed_characters: 2000
 
-        # Maximum file size of a pdf that can be processed by the pdf parser to prevent memory overflow or process timeout. Specify in KiB. 0 means no limit. 1024KiB = 1MB.
-        max_file_size:        8096
+      # Maximum file size of a pdf that can be processed by the pdf parser to prevent memory overflow or process timeout. Specify in KiB. 0 means no limit. 1024KiB = 1MB.
+      max_file_size:        8096
 
-    # Enable or disable search filter for search module
-    enable_search_filter: true
+   # Enable or disable search filter for search module
+   enable_search_filter: true
 
-    # Enable or disable max keyword filter for search module
-    disable_max_keyword_filter: false
+   # Enable or disable max keyword filter for search module
+   disable_max_keyword_filter: false
 
-    # Configure whether you want to update the index entry on every request
-    disable_search_indexer: false
+   # Enable a search keyword logging.
+   enable_search_log:    false
 
-    # Enable a search keyword logging.
-    enable_search_log:    false
-
-    # Set additional chars that should be not break a word (used for charlist parameter of str_word_count function).
-    valid_word_chars:     ÄäÖöÜüẞß
-
+   # Set additional chars that should be not break a word (used for charlist parameter of str_word_count function).
+   valid_word_chars:     ÄäÖöÜüẞß
 ```
-
-## Extend
-
-### Events
-
-Event | Description
------ | -----------
-BeforeGetSearchablePagesEvent | Is triggered before a getSearchablePages hook entry is called in RebuildSearchIndexCommand. You'll be able to modifiy class, method, pages-Array or skip execution of current hook entry.
 
 ## Acknowledgments
 

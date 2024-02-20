@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+
+## [3.0.0] - 2024-02-20
+This release just dropped deprecated features and adjust the bundle for contao 4.13 and 5. There are no now features in this release.
+
+- Changed: refactored bundle to current symfony and contao standards
+- Fixed: warning
+- Removed: rebuild search index command
+- Removed: disable_search_indexer config option
+
 ## [2.9.0] - 2023-11-28
 - Changed: refactored content element
 - Fixed: incorrect links when pdf was not in a download element ([#9], [@c4y])
