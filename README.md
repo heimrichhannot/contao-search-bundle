@@ -7,8 +7,6 @@ This bundle contains enhancements for Contao Search. You can enable or disable a
 
 ## Features
 * pdf search
-* Rebuild search index command for contao versions before 4.9
-* Disable search index update on page visit
 * set maximum number of search terms
 * Page filter for search module
 * Related search content element
@@ -63,15 +61,6 @@ This element is basically the content hyperlink element (also uses the same temp
 1. Create a Related search link content element on a page with an search module
 1. Set another page with a search module as target
 
-### Disable search indexer
-
-> If you use contao 4.9 or higher, we recommend to use the [core implementation](https://docs.contao.org/dev/framework/search-indexing/) instead.
-
-This option let you disable indexing page on every page visit. This is recommend for large websites if you find performance issues or have a lot of duplicates in your search index.
-
-1. Enable `huh_search.disable_search_indexer`
-1. We recommend to use this option combined with the `huh:search:index` command
-
 ### Search keyword log
 
 To log search keywords, just set `huh_search.enable_search_log` to true. Afterwards you'll find `huh_search_log`-files withing your log folder containing a csv-formatted list of datetime and keyword. Maximum 7 days are stored (you can alter this period by customizing the monolog settings for huh_search_log channel).
@@ -93,22 +82,6 @@ To enable pdf indexing for contao search, following steps are needed:
 1. Rebuild search index
 
 For more configuration options for the pdf indexer see the configuration reference.
-
-## Search index command
-
-> If you use contao 4.9 or higher, we recommend to use the [core implementation](https://docs.contao.org/dev/framework/search-indexing/) instead.
-
-This command let you build up your search index from console or a periodic cron job. This is especially useful, if you can't rebuild your search index from the contao backend. Pages that could not be indexed are logged into an huh_search log file in your log folder.
-
-```
-Usage:
-  huh:search:index [options]
-
-Options:
-      --dry-run                    Performs a run without purging the search database.
-      --concurrency[=CONCURRENCY]  Number of parallel requests [default: 5]
-```
-
 
 ## Configuration
 

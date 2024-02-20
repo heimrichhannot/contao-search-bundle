@@ -13,12 +13,18 @@ namespace HeimrichHannot\SearchBundle;
 
 
 use HeimrichHannot\SearchBundle\DependencyInjection\ContaoSearchExtension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeimrichHannotSearchBundle extends Bundle
 {
-    public function getContainerExtension()
+    public function getContainerExtension(): ExtensionInterface
     {
         return new ContaoSearchExtension();
+    }
+
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
     }
 }

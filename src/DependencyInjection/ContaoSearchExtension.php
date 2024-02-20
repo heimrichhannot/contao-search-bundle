@@ -26,17 +26,17 @@ class ContaoSearchExtension extends Extension
      * @param ContainerBuilder $container
      * @throws \Exception
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $bundleConfig = $this->processConfiguration($configuration, $configs);
         $container->setParameter('huh_search', $bundleConfig);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader->load('services.yaml');
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'huh_search';
     }
