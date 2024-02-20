@@ -21,52 +21,34 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CustomizeSearchListener
 {
-    /**
-     * @var bool
-     */
-    protected $enableFilterSearch = false;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    /**
-     * @var bool
-     */
-    private $disableMaxKeywordFilter = false;
+    protected bool $enableFilterSearch = false;
+    private bool $disableMaxKeywordFilter = false;
+    protected string $validWordChars = '';
+    protected bool $enableSearchLog = false;
 
-    protected $validWordChars = '';
-
-    protected $enableSearchLog = false;
-    /**
-     * @var Logger
-     */
-    private $searchLogLogger;
 
     /**
      * CustomizeSearchListener constructor.
      * @param array $bundleConfig
      */
-    public function __construct(array $bundleConfig, TranslatorInterface $translator, Logger $searchLogLogger)
+    public function __construct(
+        array                       $bundleConfig,
+        private TranslatorInterface $translator,
+        private Logger              $searchLogLogger
+    )
     {
-        if (isset($bundleConfig['enable_search_filter']) && true === $bundleConfig['enable_search_filter'])
-        {
+        if (isset($bundleConfig['enable_search_filter']) && true === $bundleConfig['enable_search_filter']) {
             $this->enableFilterSearch = true;
         }
-        if (isset($bundleConfig['disable_max_keyword_filter']) && true === $bundleConfig['disable_max_keyword_filter'])
-        {
+        if (isset($bundleConfig['disable_max_keyword_filter']) && true === $bundleConfig['disable_max_keyword_filter']) {
             $this->disableMaxKeywordFilter = true;
         }
-        if (isset($bundleConfig['valid_word_chars']) && !empty($bundleConfig['valid_word_chars']))
-        {
+        if (isset($bundleConfig['valid_word_chars']) && !empty($bundleConfig['valid_word_chars'])) {
             $this->validWordChars = $bundleConfig['valid_word_chars'];
         }
-        if (isset($bundleConfig['enable_search_log']) && true === $bundleConfig['enable_search_log'])
-        {
+        if (isset($bundleConfig['enable_search_log']) && true === $bundleConfig['enable_search_log']) {
             $this->enableSearchLog = true;
         }
-
-        $this->translator = $translator;
-        $this->searchLogLogger = $searchLogLogger;
     }
 
     /**
@@ -97,15 +79,12 @@ class CustomizeSearchListener
     protected function filterSearch(array &$pageIds, Module $module)
     {
         $filterPages = StringUtil::deserialize($module->filterPages, true);
-        if (!empty($filterPages) && $module->pageMode)
-        {
-            if ($module->addPageDepth)
-            {
+        if (!empty($filterPages) && $module->pageMode) {
+            if ($module->addPageDepth) {
                 $filterPages = array_merge($filterPages, Database::getInstance()->getChildRecords($filterPages, 'tl_page'));
             }
 
-            switch ($module->pageMode)
-            {
+            switch ($module->pageMode) {
                 case 'include':
                     $pageIds = $filterPages;
                     break;
@@ -118,7 +97,7 @@ class CustomizeSearchListener
 
     protected function filterInput(string &$keywords, Module $module)
     {
-        if ($module->maxKeywordCount < 1 ) {
+        if ($module->maxKeywordCount < 1) {
             return;
         }
         $words = str_word_count($keywords, 2, $this->validWordChars);

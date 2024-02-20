@@ -27,27 +27,20 @@ use Smalot\PdfParser\Parser;
 
 class PdfSearchIndexer
 {
-    protected ContaoFramework $framework;
-    protected Connection $connection;
-    protected array $bundleConfig;
-    private Utils $utils;
-
-    /**
-     * PdfSearchIndexer constructor.
-     */
-    public function __construct(ContaoFramework $framework, Connection $connection, array $bundleConfig, Utils $utils)
+    public function __construct(
+        protected ContaoFramework $framework,
+        protected Connection      $connection,
+        protected array           $bundleConfig,
+        private Utils             $utils
+    )
     {
-        $this->framework     = $framework;
-        $this->connection    = $connection;
-        $this->bundleConfig  = $bundleConfig;
-        $this->utils = $utils;
     }
 
     public function indexPdfFiles(array $links, array $parentSet)
     {
         foreach ($links as $strFile) {
             $arrUrl = parse_url($strFile);
-            
+
             if (($strFile = static::getValidPath($strFile, [Environment::get('host')], $arrUrl)) === null) {
                 continue;
             }
@@ -56,7 +49,7 @@ class PdfSearchIndexer
         }
     }
 
-    public function getValidPath($varValue, array $arrHosts = [], $arrUrl)
+    public function getValidPath($varValue, array $arrHosts, array $arrUrl)
     {
         $strFile = $arrUrl['path'];
 
@@ -124,15 +117,15 @@ class PdfSearchIndexer
         $filesize = round($objFile->size / 1024, 2);
 
         $arrSet = [
-            'pid'       => $arrParentSet['pid'],
-            'tstamp'    => time(),
-            'title'     => $arrMeta['title'],
-            'url'       => $strHref,
-            'filesize'  => $filesize,
-            'fileHash'  => $objFile->hash,
+            'pid' => $arrParentSet['pid'],
+            'tstamp' => time(),
+            'title' => $arrMeta['title'],
+            'url' => $strHref,
+            'filesize' => $filesize,
+            'fileHash' => $objFile->hash,
             'protected' => $arrParentSet['protected'],
-            'groups'    => $arrParentSet['groups'],
-            'language'  => $arrParentSet['language'],
+            'groups' => $arrParentSet['groups'],
+            'language' => $arrParentSet['language'],
         ];
 
         $stmt = $this->connection->executeQuery("SELECT * FROM tl_search WHERE pid=? AND fileHash=?", [$arrSet['pid'], $arrSet['fileHash']]);
@@ -151,8 +144,8 @@ class PdfSearchIndexer
 
         try {
             // parse only for the first occurrence
-            $parser     = new Parser();
-            $objPDF     = $parser->parseFile($strFile);
+            $parser = new Parser();
+            $objPDF = $parser->parseFile($strFile);
             $strContent = $objPDF->getText();
 
         } catch (\Exception $e) {

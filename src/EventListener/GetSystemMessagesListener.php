@@ -12,22 +12,13 @@
 namespace HeimrichHannot\SearchBundle\EventListener;
 
 
-/**
- * @Hook("getSystemMessages")
- */
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
+
+#[AsHook("getSystemMessages")]
 class GetSystemMessagesListener
 {
-    /**
-     * @var array
-     */
-    protected $bundleConfig;
-
-    /**
-     * GetSystemMessagesListener constructor.
-     */
-    public function __construct(array $bundleConfig)
+    public function __construct(private array $bundleConfig)
     {
-        $this->bundleConfig = $bundleConfig;
     }
 
     public function __invoke(): string

@@ -16,11 +16,11 @@ class RelatedSearchLinkElementController extends ContentHyperlink
 {
     public const TYPE = 'related_search_link';
 
-    private Utils $utils;
 
     /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct(Utils $utils) {
-        $this->utils = $utils;
+    public function __construct(
+        private Utils $utils,
+    ) {
     }
 
     public function __invoke(ContentModel $model, string $section): Response

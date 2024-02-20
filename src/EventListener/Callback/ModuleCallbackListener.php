@@ -2,7 +2,7 @@
 
 namespace HeimrichHannot\SearchBundle\EventListener\Callback;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Folder;
 use Contao\ModuleModel;
@@ -11,18 +11,13 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ModuleCallbackListener
 {
-    private ParameterBagInterface $parameterBag;
-
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(private ParameterBagInterface $parameterBag)
     {
-        $this->parameterBag = $parameterBag;
     }
 
-    /**
-     * @Callback(table="tl_module", target="fields.filterPages.save")
-     * @Callback(table="tl_module", target="fields.addPageDepth.save")
-     * @Callback(table="tl_module", target="fields.pageMode.save")
-     */
+    #[AsCallback(table: 'tl_module', target: 'fields.filterPages.save')]
+    #[AsCallback(table: 'tl_module', target: 'fields.addPageDepth.save')]
+    #[AsCallback(table: 'tl_module', target: 'fields.pageMode.save')]
     public function onSaveFilterPagesCallback($value, DataContainer $dc = null)
     {
         if (!$dc || !$dc->id) {

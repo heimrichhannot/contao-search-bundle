@@ -17,19 +17,9 @@ use Doctrine\DBAL\Types\Types;
 
 class LoadDataContainerListener
 {
-    /**
-     * @var bool
-     */
-    protected $filterSearch = false;
-    /**
-     * @var bool
-     */
-    private $disableMaxKeywordFilter = false;
+    protected bool $filterSearch = false;
+    private bool $disableMaxKeywordFilter = false;
 
-    /**
-     * LoadDataContainerListener constructor.
-     * @param array $bundleConfig
-     */
     public function __construct(array $bundleConfig)
     {
         if (isset($bundleConfig['enable_search_filter']) && true === $bundleConfig['enable_search_filter'])
