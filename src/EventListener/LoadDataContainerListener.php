@@ -12,6 +12,7 @@
 namespace HeimrichHannot\SearchBundle\EventListener;
 
 
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Doctrine\DBAL\Types\Types;
 
@@ -47,60 +48,64 @@ class LoadDataContainerListener
 
         if ($this->filterSearch)
         {
-            $dca['palettes']['search'] = str_replace('{redirect_legend', '{search_filter_legend},pageMode,filterPages,addPageDepth;{redirect_legend', $dca['palettes']['search']);
+            PaletteManipulator::create()
+                ->addLegend('search_filter_legend', 'redirect_legend')
+                ->addField(['pageMode', 'filterPages', 'addPageDepth'], 'search_filter_legend', PaletteManipulator::POSITION_APPEND)
+                ->applyToPalette('search', 'tl_module');
 
-            $fields        = [
-                'pageMode'     => [
-                    'label'     => &$GLOBALS['TL_LANG']['tl_module']['pageMode'],
-                    'exclude'   => true,
-                    'inputType' => 'radio',
-                    'options'   => ['exclude', 'include'],
-                    'default'   => 'exclude',
-                    'reference' => &$GLOBALS['TL_LANG']['tl_module']['pageMode'],
-                    'eval'      => ['tl_class' => 'w50'],
-                    'sql'       => "varchar(8) NOT NULL default 'exclude'",
-                ],
-                'filterPages'  => array_merge_recursive([
-                    'label'     => &$GLOBALS['TL_LANG']['tl_module']['filterPages'],
-                    'eval'      => ['tl_class' => 'clr'],
-                ], $dca['fields']['pages']),
-                'addPageDepth' => [
-                    'label'     => &$GLOBALS['TL_LANG']['tl_module']['addPageDepth'],
-                    'exclude'   => true,
-                    'inputType' => 'checkbox',
-                    'default'   => true,
-                    'eval'      => ['tl_class' => 'w50 clr'],
-                    'sql'       => "char(1) NOT NULL default '1'",
-                ]
+            $dca['fields']['pageMode'] = [
+                'exclude'   => true,
+                'inputType' => 'radio',
+                'options'   => ['exclude', 'include'],
+                'default'   => 'exclude',
+                'reference' => &$GLOBALS['TL_LANG']['tl_module']['pageMode'],
+                'eval'      => ['tl_class' => 'w50'],
+                'sql'       => "varchar(8) NOT NULL default 'exclude'",
             ];
 
-            $dca['fields'] = array_merge($fields, is_array($dca['fields']) ? $dca['fields'] : []);
+            $dca['fields']['filterPages'] = [
+                'exclude' => true,
+                'inputType' => 'pageTree',
+                'foreignKey' => 'tl_page.title',
+                'eval' => array('multiple' => true, 'fieldType' => 'checkbox', 'isSortable' => true, 'tl_class' => 'clr'),
+                'load_callback' => array
+                (
+                    array('tl_module', 'setPagesFlags')
+                ),
+                'sql' => "blob NULL",
+                'relation' => array('type' => 'hasMany', 'load' => 'lazy')
+            ];
 
-            unset($dca['fields']['filterPages']['eval']['mandatory']);
+            $dca['fields']['addPageDepth'] = [
+                'exclude'   => true,
+                'inputType' => 'checkbox',
+                'default'   => true,
+                'eval'      => ['tl_class' => 'w50 clr'],
+                'sql'       => "char(1) NOT NULL default '1'",
+            ];
         }
 
         if (!$this->disableMaxKeywordFilter) {
-            $dca['palettes']['search'] = str_replace(',fuzzy', ',maxKeywordCount,fuzzy', $dca['palettes']['search']);
 
-            $fields = [
-                'maxKeywordCount' => [
-                    'label'     => &$GLOBALS['TL_LANG']['tl_module']['maxKeywordCount'],
-                    'exclude'   => true,
-                    'inputType' => 'text',
-                    'eval'      => [
-                        'rgxp' => 'digit',
-                        'tl_class' => 'clr w50',
-                        'maxval' => 128,
-                    ],
-                    'sql'       => [
-                        'type' => Types::SMALLINT,
-                        'notnull' => true,
-                        'unsigned' => true,
-                        'default' => 0
-                    ]
+            PaletteManipulator::create()
+                ->addField('maxKeywordCount', 'fuzzy')
+                ->applyToPalette('search', 'tl_module');
+
+            $dca['fields']['maxKeywordCount'] = [
+                'exclude'   => true,
+                'inputType' => 'text',
+                'eval'      => [
+                    'rgxp' => 'digit',
+                    'tl_class' => 'clr w50',
+                    'maxval' => 128,
+                ],
+                'sql'       => [
+                    'type' => Types::SMALLINT,
+                    'notnull' => true,
+                    'unsigned' => true,
+                    'default' => 0
                 ]
             ];
-            $dca['fields'] = array_merge($fields, is_array($dca['fields']) ? $dca['fields'] : []);
         }
     }
 }

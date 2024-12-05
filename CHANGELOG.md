@@ -1,7 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-
+## [3.0.1] - 2024-12-05
+- Fixed: some module fields not showing ([#10](https://github.com/heimrichhannot/contao-search-bundle/issues/10))
 
 ## [3.0.0] - 2024-02-20
 This release just dropped deprecated features and adjust the bundle for contao 4.13 and 5. There are no now features in this release.
