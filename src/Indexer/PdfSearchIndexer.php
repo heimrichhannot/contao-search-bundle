@@ -32,7 +32,7 @@ class PdfSearchIndexer
         protected ContaoFramework $framework,
         protected Connection      $connection,
         protected array           $bundleConfig,
-        private Utils             $utils,
+        private readonly Utils             $utils,
         private readonly ParameterBagInterface $parameterBag,
     )
     {
@@ -41,7 +41,7 @@ class PdfSearchIndexer
     public function indexPdfFiles(array $links, array $parentSet): void
     {
         foreach ($links as $strFile) {
-            $arrUrl = parse_url($strFile);
+            $arrUrl = parse_url((string) $strFile);
 
             if (($strFile = static::getValidPath($strFile, [Environment::get('host')], $arrUrl)) === null) {
                 continue;
@@ -63,14 +63,14 @@ class PdfSearchIndexer
         }
 
         // check for download link
-        if (isset($arrUrl['query']) && preg_match('#file=(?<path>.*.pdf)#i', $arrUrl['query'], $m)) {
+        if (isset($arrUrl['query']) && preg_match('#file=(?<path>.*.pdf)#i', (string) $arrUrl['query'], $m)) {
             $strFile = $m['path'];
         }
 
 
         // check if file exists
         if ($strFile !== null) {
-            $strFile = ltrim(urldecode($strFile), '/');
+            $strFile = ltrim(urldecode((string) $strFile), '/');
 
             if (!file_exists($this->parameterBag->get('kernel.project_dir') . '/' . $strFile)) {
                 $strFile = null;
@@ -110,8 +110,8 @@ class PdfSearchIndexer
         }
 
         // check for download link
-        if (isset($arrUrl['query']) && preg_match('#file=(?<path>.*.pdf)#i', $arrUrl['query'], $m)) {
-            $strHref .= ((Config::get('disableAlias') || strpos($strHref, '?') !== false) ? '&amp;' : '?') . 'file=' . System::urlEncode($objFile->value);
+        if (isset($arrUrl['query']) && preg_match('#file=(?<path>.*.pdf)#i', (string) $arrUrl['query'], $m)) {
+            $strHref .= ((Config::get('disableAlias') || str_contains((string) $strHref, '?')) ? '&amp;' : '?') . 'file=' . System::urlEncode($objFile->value);
         } else {
             $strHref .= System::urlEncode($objFile->value);
         }
@@ -150,16 +150,16 @@ class PdfSearchIndexer
             $objPDF = $parser->parseFile($strFile);
             $strContent = $objPDF->getText();
 
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return;
         }
 
-        if (false === mb_detect_encoding($strContent, 'UTF-8', true)) {
+        if (false === mb_detect_encoding((string) $strContent, 'UTF-8', true)) {
             $strContent = $this->fixUtf8Encoding([$strContent]);
         }
 
         // Put everything together
-        $strContent = trim(preg_replace('/ +/', ' ', StringUtil::decodeEntities($strContent)));
+        $strContent = trim((string) preg_replace('/ +/', ' ', StringUtil::decodeEntities($strContent)));
 
         // save only first 2000 characters for performance reasons
         $maxCharacters = 2000;
@@ -206,14 +206,14 @@ class PdfSearchIndexer
     private function fixUtf8Encoding(array $chunks, string $content = ''): string
     {
         foreach ($chunks as $chunk) {
-            $textLength = strlen($chunk);
+            $textLength = strlen((string) $chunk);
             if ($textLength > 1000) {
                 $chunksize = (int)ceil($textLength / 1000);
-                $parts = \str_split($chunk, $chunksize);
+                $parts = \str_split((string) $chunk, $chunksize);
                 $content .= $this->fixUtf8Encoding($parts, $content);
             } else {
-                if (false === mb_detect_encoding($chunk, 'UTF-8', true)) {
-                    $chars = \str_split($chunk);
+                if (false === mb_detect_encoding((string) $chunk, 'UTF-8', true)) {
+                    $chars = \str_split((string) $chunk);
                     foreach ($chars as $char) {
                         $content .= (false === mb_detect_encoding($char, 'UTF-8') ? utf8_encode($char) : $char);
                     }

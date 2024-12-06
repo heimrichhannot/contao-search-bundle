@@ -35,8 +35,8 @@ class CustomizeSearchListener
      */
     public function __construct(
         array                       $bundleConfig,
-        private TranslatorInterface $translator,
-        private Logger              $searchLogLogger
+        private readonly TranslatorInterface $translator,
+        private readonly Logger              $searchLogLogger
     )
     {
         if (isset($bundleConfig['enable_search_filter']) && true === $bundleConfig['enable_search_filter']) {

@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ModuleCallbackListener
 {
-    public function __construct(private ParameterBagInterface $parameterBag)
+    public function __construct(private readonly ParameterBagInterface $parameterBag)
     {
     }
 
@@ -32,7 +32,7 @@ class ModuleCallbackListener
         if ($value !== $moduleModel->{$dc->field}) {
             try {
                 $folder = new Folder(StringUtil::stripRootDir($this->parameterBag->get('kernel.cache_dir')).'/contao/search');
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return $value;
             }
 

@@ -25,7 +25,7 @@ class IndexPageListener
     public function __invoke(string $content, array $pageData, array &$indexData): void
     {
         if (isset($this->bundleConfig['pdf_indexer']['enabled']) && true === $this->bundleConfig['pdf_indexer']['enabled']) {
-            if (str_ends_with($pageData['url'], '.pdf')) {
+            if (str_ends_with((string) $pageData['url'], '.pdf')) {
                 $indexData['fileHash'] = $pageData['fileHash'];
             } else {
                 if (preg_match_all('/href="(?<links>[^\"<]+\.pdf[^"]*)"/i', $content, $matches))

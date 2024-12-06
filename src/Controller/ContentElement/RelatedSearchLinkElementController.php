@@ -2,16 +2,14 @@
 
 namespace HeimrichHannot\SearchBundle\Controller\ContentElement;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\ContentHyperlink;
 use Contao\ContentModel;
-use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Input;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @ContentElement(RelatedSearchLinkElementController::TYPE, category="links", template="ce_related_search_link")
- */
+#[AsContentElement(RelatedSearchLinkElementController::TYPE, category: 'links', template: 'ce_related_search_link')]
 class RelatedSearchLinkElementController extends ContentHyperlink
 {
     public const TYPE = 'related_search_link';
@@ -19,7 +17,7 @@ class RelatedSearchLinkElementController extends ContentHyperlink
 
     /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct(
-        private Utils $utils,
+        private readonly Utils $utils,
     ) {
     }
 
