@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Contao Open Source CMS
+ * Contao Open Source CMS.
  *
  * Copyright (c) 2020 Heimrich & Hannot GmbH
  *
@@ -8,9 +9,7 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
-
 namespace HeimrichHannot\SearchBundle\Indexer;
-
 
 use Contao\Config;
 use Contao\CoreBundle\Framework\ContaoFramework;
@@ -30,12 +29,11 @@ class PdfSearchIndexer
 {
     public function __construct(
         protected ContaoFramework $framework,
-        protected Connection      $connection,
-        protected array           $bundleConfig,
-        private readonly Utils             $utils,
+        protected Connection $connection,
+        protected array $bundleConfig,
+        private readonly Utils $utils,
         private readonly ParameterBagInterface $parameterBag,
-    )
-    {
+    ) {
     }
 
     public function indexPdfFiles(array $links, array $parentSet): void
@@ -67,9 +65,8 @@ class PdfSearchIndexer
             $strFile = $m['path'];
         }
 
-
         // check if file exists
-        if ($strFile !== null) {
+        if (null !== $strFile) {
             $strFile = ltrim(urldecode((string) $strFile), '/');
 
             if (!file_exists($this->parameterBag->get('kernel.project_dir') . '/' . $strFile)) {
@@ -93,7 +90,7 @@ class PdfSearchIndexer
         $arrMeta = Frontend::getMetaData($objModel->meta, $arrParentSet['language']);
 
         // Use the file name as title if none is given
-        if ($arrMeta['title'] == '') {
+        if ('' == $arrMeta['title']) {
             $arrMeta['title'] = StringUtil::specialchars($objFile->basename);
         }
 
@@ -130,7 +127,7 @@ class PdfSearchIndexer
             'language' => $arrParentSet['language'],
         ];
 
-        $stmt = $this->connection->executeQuery("SELECT * FROM tl_search WHERE pid=? AND fileHash=?", [$arrSet['pid'], $arrSet['fileHash']]);
+        $stmt = $this->connection->executeQuery('SELECT * FROM tl_search WHERE pid=? AND fileHash=?', [$arrSet['pid'], $arrSet['fileHash']]);
         if ($stmt->rowCount() > 0) {
             return;
         }
@@ -141,6 +138,7 @@ class PdfSearchIndexer
 
         if (!class_exists("Smalot\PdfParser\Parser")) {
             trigger_error("Smalot\PdfParser\Parser is needed for pdf indexing.", E_USER_WARNING);
+
             return;
         }
 
@@ -149,7 +147,6 @@ class PdfSearchIndexer
             $parser = new Parser();
             $objPDF = $parser->parseFile($strFile);
             $strContent = $objPDF->getText();
-
         } catch (\Exception) {
             return;
         }
@@ -168,7 +165,6 @@ class PdfSearchIndexer
         }
         $arrSet['content'] = substr($strContent, 0, $maxCharacters);
 
-
         $this->framework->initialize();
 
         /** @var Search $search */
@@ -178,13 +174,14 @@ class PdfSearchIndexer
             $search->indexPage($arrSet);
         } catch (\Throwable $t) {
             if ($this->utils->container()->isDev()) {
-                throw new \Exception("Could not add a search index entry: " . $t->getMessage());
+                throw new \Exception('Could not add a search index entry: ' . $t->getMessage());
             }
         }
     }
 
     /**
      * @param File $objFile
+     *
      * @return bool
      */
     public function isValidPDF($objFile)
@@ -197,18 +194,14 @@ class PdfSearchIndexer
     }
 
     /**
-     * Fix utf 8 encoding of pdf content
-     *
-     * @param array $chunks
-     * @param string $content
-     * @return string
+     * Fix utf 8 encoding of pdf content.
      */
     private function fixUtf8Encoding(array $chunks, string $content = ''): string
     {
         foreach ($chunks as $chunk) {
             $textLength = strlen((string) $chunk);
             if ($textLength > 1000) {
-                $chunksize = (int)ceil($textLength / 1000);
+                $chunksize = (int) ceil($textLength / 1000);
                 $parts = \str_split((string) $chunk, $chunksize);
                 $content .= $this->fixUtf8Encoding($parts, $content);
             } else {
@@ -222,6 +215,7 @@ class PdfSearchIndexer
                 }
             }
         }
+
         return $content;
     }
 }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Contao Open Source CMS
+ * Contao Open Source CMS.
  *
  * Copyright (c) 2019 Heimrich & Hannot GmbH
  *
@@ -8,9 +9,7 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
-
 namespace HeimrichHannot\SearchBundle;
-
 
 use HeimrichHannot\SearchBundle\DependencyInjection\ContaoSearchExtension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;

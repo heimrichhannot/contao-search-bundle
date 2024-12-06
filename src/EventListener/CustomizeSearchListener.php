@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Contao Open Source CMS
+ * Contao Open Source CMS.
  *
  * Copyright (c) 2019 Heimrich & Hannot GmbH
  *
@@ -8,9 +9,7 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
-
 namespace HeimrichHannot\SearchBundle\EventListener;
-
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Database;
@@ -20,7 +19,7 @@ use Contao\StringUtil;
 use Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AsHook("customizeSearch")]
+#[AsHook('customizeSearch')]
 class CustomizeSearchListener
 {
     protected bool $enableFilterSearch = false;
@@ -28,17 +27,11 @@ class CustomizeSearchListener
     protected string $validWordChars = '';
     protected bool $enableSearchLog = false;
 
-
-    /**
-     * CustomizeSearchListener constructor.
-     * @param array $bundleConfig
-     */
     public function __construct(
-        array                       $bundleConfig,
+        array $bundleConfig,
         private readonly TranslatorInterface $translator,
-        private readonly Logger              $searchLogLogger
-    )
-    {
+        private readonly Logger $searchLogLogger,
+    ) {
         if (isset($bundleConfig['enable_search_filter']) && true === $bundleConfig['enable_search_filter']) {
             $this->enableFilterSearch = true;
         }
@@ -54,10 +47,6 @@ class CustomizeSearchListener
     }
 
     /**
-     * @param array $pageIds
-     * @param string $keywords
-     * @param string $queryType
-     * @param bool $fuzzy
      * @param ModuleSearch|Module $module
      */
     public function __invoke(array &$pageIds, string &$keywords, string $queryType, bool $fuzzy, Module $module): void
@@ -105,10 +94,10 @@ class CustomizeSearchListener
         $words = str_word_count($keywords, 2, $this->validWordChars);
         if (is_array($words) && count($words) > $module->maxKeywordCount) {
             $indexes = array_keys($words);
-            $keywords = substr($keywords, 0, ($indexes[$module->maxKeywordCount] - 1));
+            $keywords = substr($keywords, 0, $indexes[$module->maxKeywordCount] - 1);
             $module->Template->maxKeywordsExceededMessage = $this->translator->trans('huh_search.module.max_keywords_exceeded_message', [
-                "%max%" => $module->maxKeywordCount,
-                "%count%" => count($words),
+                '%max%' => $module->maxKeywordCount,
+                '%count%' => count($words),
             ]);
         }
     }

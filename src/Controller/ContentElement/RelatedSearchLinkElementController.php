@@ -2,9 +2,9 @@
 
 namespace HeimrichHannot\SearchBundle\Controller\ContentElement;
 
-use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\ContentHyperlink;
 use Contao\ContentModel;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\Input;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +14,9 @@ class RelatedSearchLinkElementController extends ContentHyperlink
 {
     public const TYPE = 'related_search_link';
 
-
-    /** @noinspection PhpMissingParentConstructorInspection */
+    /**
+     * @noinspection PhpMissingParentConstructorInspection
+     */
     public function __construct(
         private readonly Utils $utils,
     ) {
@@ -34,14 +35,12 @@ class RelatedSearchLinkElementController extends ContentHyperlink
         $query = '';
         $parameter = Input::get('keywords', false, true);
         if (!empty($parameter)) {
-            $query .= 'keywords='.$parameter;
+            $query .= 'keywords=' . $parameter;
         }
         $parameter = Input::get('query_type', false, true);
         if (!empty($parameter)) {
-            $query .= '&query_type='.$parameter;
+            $query .= '&query_type=' . $parameter;
         }
         $this->Template->href = $this->utils->url()->addQueryStringParameterToUrl($query, $this->url);
     }
-
-    
 }

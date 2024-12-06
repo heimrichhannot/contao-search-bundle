@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Contao Open Source CMS
+ * Contao Open Source CMS.
  *
  * Copyright (c) 2019 Heimrich & Hannot GmbH
  *
@@ -8,9 +9,7 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
-
 namespace HeimrichHannot\SearchBundle\ContaoManager;
-
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
@@ -23,7 +22,6 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class Plugin implements BundlePluginInterface, ConfigPluginInterface
 {
-
     /**
      * Gets a list of autoload configurations for this bundle.
      *
@@ -32,9 +30,9 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface
     public function getBundles(ParserInterface $parser): array
     {
         return [
-          BundleConfig::create(HeimrichHannotSearchBundle::class)->setLoadAfter([
-             ContaoCoreBundle::class
-          ])
+            BundleConfig::create(HeimrichHannotSearchBundle::class)->setLoadAfter([
+                ContaoCoreBundle::class,
+            ]),
         ];
     }
 

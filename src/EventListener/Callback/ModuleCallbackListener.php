@@ -11,14 +11,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ModuleCallbackListener
 {
-    public function __construct(private readonly ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        private readonly ParameterBagInterface $parameterBag,
+    ) {
     }
 
     #[AsCallback(table: 'tl_module', target: 'fields.filterPages.save')]
     #[AsCallback(table: 'tl_module', target: 'fields.addPageDepth.save')]
     #[AsCallback(table: 'tl_module', target: 'fields.pageMode.save')]
-    public function onSaveFilterPagesCallback($value, DataContainer $dc = null)
+    public function onSaveFilterPagesCallback($value, ?DataContainer $dc = null)
     {
         if (!$dc || !$dc->id) {
             return $value;
@@ -31,7 +32,7 @@ class ModuleCallbackListener
 
         if ($value !== $moduleModel->{$dc->field}) {
             try {
-                $folder = new Folder(StringUtil::stripRootDir($this->parameterBag->get('kernel.cache_dir')).'/contao/search');
+                $folder = new Folder(StringUtil::stripRootDir($this->parameterBag->get('kernel.cache_dir')) . '/contao/search');
             } catch (\Exception) {
                 return $value;
             }
