@@ -24,6 +24,7 @@ use Contao\System;
 use Doctrine\DBAL\Connection;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Smalot\PdfParser\Parser;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PdfSearchIndexer
 {
@@ -31,12 +32,13 @@ class PdfSearchIndexer
         protected ContaoFramework $framework,
         protected Connection      $connection,
         protected array           $bundleConfig,
-        private Utils             $utils
+        private Utils             $utils,
+        private readonly ParameterBagInterface $parameterBag,
     )
     {
     }
 
-    public function indexPdfFiles(array $links, array $parentSet)
+    public function indexPdfFiles(array $links, array $parentSet): void
     {
         foreach ($links as $strFile) {
             $arrUrl = parse_url($strFile);
@@ -70,7 +72,7 @@ class PdfSearchIndexer
         if ($strFile !== null) {
             $strFile = ltrim(urldecode($strFile), '/');
 
-            if (!file_exists(TL_ROOT . '/' . $strFile)) {
+            if (!file_exists($this->parameterBag->get('kernel.project_dir') . '/' . $strFile)) {
                 $strFile = null;
             }
         }

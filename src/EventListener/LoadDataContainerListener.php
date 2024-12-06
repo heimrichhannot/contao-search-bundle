@@ -38,7 +38,7 @@ class LoadDataContainerListener
     /**
      * @param string $table
      */
-    public function __invoke(string $table)
+    public function __invoke(string $table): void
     {
         if ('tl_module' !== $table) {
             return;
@@ -67,13 +67,10 @@ class LoadDataContainerListener
                 'exclude' => true,
                 'inputType' => 'pageTree',
                 'foreignKey' => 'tl_page.title',
-                'eval' => array('multiple' => true, 'fieldType' => 'checkbox', 'isSortable' => true, 'tl_class' => 'clr'),
-                'load_callback' => array
-                (
-                    array('tl_module', 'setPagesFlags')
-                ),
+                'eval' => ['multiple' => true, 'fieldType' => 'checkbox', 'isSortable' => true, 'tl_class' => 'clr'],
+                'load_callback' => [['tl_module', 'setPagesFlags']],
                 'sql' => "blob NULL",
-                'relation' => array('type' => 'hasMany', 'load' => 'lazy')
+                'relation' => ['type' => 'hasMany', 'load' => 'lazy']
             ];
 
             $dca['fields']['addPageDepth'] = [
