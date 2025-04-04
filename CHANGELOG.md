@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.2] - 2025-04-03
+- Fixed: contao 5 related issue ([#11](https://github.com/heimrichhannot/contao-search-bundle/issues/11))
+
 ## [3.0.1] - 2024-12-05
 - Fixed: some module fields not showing ([#10](https://github.com/heimrichhannot/contao-search-bundle/issues/10))
 
