@@ -13,7 +13,6 @@
     "symfony/deprecation-contracts": "^1.0 || ^2.0 || ^3.0",
     "symfony/event-dispatcher-contracts": "^1.0 || ^2.0 || ^3.0",
     "symfony/http-kernel": "^5.4 || ^6.0",
-    "symfony/polyfill-php80": "^v1.27.0",
     "symfony/translation-contracts": "^1.0 || ^2.0 || ^3.0"
   },
   "conflict": {
