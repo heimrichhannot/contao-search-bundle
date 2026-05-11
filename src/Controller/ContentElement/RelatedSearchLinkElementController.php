@@ -41,6 +41,6 @@ class RelatedSearchLinkElementController extends ContentHyperlink
         if (!empty($parameter)) {
             $query .= '&query_type=' . $parameter;
         }
-        $this->Template->href = $this->utils->url()->addQueryStringParameterToUrl($query, $this->url);
+        $this->Template->href = $this->utils->url()->addQueryStringParameterToUrl($query);
     }
 }
