@@ -155,8 +155,8 @@ class PdfSearchIndexer
             $strContent = $this->fixUtf8Encoding([$strContent]);
         }
 
-        // Put everything together
-        $strContent = trim((string) preg_replace('/ +/', ' ', StringUtil::decodeEntities($strContent)));
+        // Put everything together, include title/filename for better searchability
+        $strContent = $arrMeta['title'].' '.trim((string) preg_replace('/ +/', ' ', StringUtil::decodeEntities($strContent)));
 
         // save only first 2000 characters for performance reasons
         $maxCharacters = 2000;
