@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.4] - 2026-06-10
+- Fixed: incorrect url in related search link element
+
 ## [3.0.3] - 2026-05-11
 - Changed: Remove redundant symfony/polyfill-php80 dependency ([#13](https://github.com/heimrichhannot/contao-search-bundle/pull/13), [@brendt](https://github.com/brendt))
 - Fixed: pdf file name not indexed ([#12](https://github.com/heimrichhannot/contao-search-bundle/pull/12))

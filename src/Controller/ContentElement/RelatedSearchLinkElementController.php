@@ -5,6 +5,7 @@ namespace HeimrichHannot\SearchBundle\Controller\ContentElement;
 use Contao\ContentHyperlink;
 use Contao\ContentModel;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
 use Contao\Input;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ class RelatedSearchLinkElementController extends ContentHyperlink
      */
     public function __construct(
         private readonly Utils $utils,
+        private readonly InsertTagParser $insertTagParser,
     ) {
     }
 
@@ -41,6 +43,7 @@ class RelatedSearchLinkElementController extends ContentHyperlink
         if (!empty($parameter)) {
             $query .= '&query_type=' . $parameter;
         }
-        $this->Template->href = $this->utils->url()->addQueryStringParameterToUrl($query);
+        $href = $this->insertTagParser->replaceInline($this->Template->href);
+        $this->Template->href = $this->utils->url()->addQueryStringParameterToUrl($query, $href);
     }
 }
